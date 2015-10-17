@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{B0B50A12-62AC-4675-9813-80200BBE5BDB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicalCreatureDataBase.Models</RootNamespace>
-    <AssemblyName>MagicalCreatureDataBase.Models</AssemblyName>
+    <RootNamespace>MagicalCreatureDataBase.ConsoleClient</RootNamespace>
+    <AssemblyName>MagicalCreatureDataBase.ConsoleClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -49,18 +52,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enumerations\AgressionLevel.cs" />
-    <Compile Include="Enumerations\DangerLevel.cs" />
-    <Compile Include="Location.cs" />
-    <Compile Include="MagicalCreature.cs" />
-    <Compile Include="Mythology.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Species.cs" />
-    <Compile Include="SuperNaturalAbility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MagicalCreatureDataBase.Data\MagicalCreatureDataBase.Data.csproj">
+      <Project>{e0083daf-e92e-45d3-aea8-478eaad912c9}</Project>
+      <Name>MagicalCreatureDataBase.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MagicalCreatureDataBase.Models\MagicalCreatureDataBase.Models.csproj">
+      <Project>{133838a9-5ff1-4fbb-b98e-b1e5ad019b7d}</Project>
+      <Name>MagicalCreatureDataBase.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,6 +5,11 @@
 
     public class MagicalCreatureDbContext : DbContext
     {
+        public MagicalCreatureDbContext()
+            :base("MagicalCreaturesDb")
+        {
+        }
+
         public virtual IDbSet<MagicalCreature> MagicalCreatures { get; set; }
 
         public virtual IDbSet<Mythology> Mythologies { get; set; }

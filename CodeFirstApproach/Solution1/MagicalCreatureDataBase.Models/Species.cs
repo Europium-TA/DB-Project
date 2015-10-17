@@ -10,7 +10,6 @@
 
         public string Description { get; set; }
 
-
         public virtual int MythologyId { get; set; }
 
         public virtual Mythology Mythology { get; set; }

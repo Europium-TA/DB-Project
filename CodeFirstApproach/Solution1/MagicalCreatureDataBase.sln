@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalCreatureDataBase.Models", "MagicalCreatureDataBase.Models\MagicalCreatureDataBase.Models.csproj", "{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalCreatureDataBase.Data", "MagicalCreatureDataBase.Data\MagicalCreatureDataBase.Data.csproj", "{E0083DAF-E92E-45D3-AEA8-478EAAD912C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalCreatureDataBase.ConsoleClient", "MagicalCreatureDataBase.ConsoleClient\MagicalCreatureDataBase.ConsoleClient.csproj", "{B0B50A12-62AC-4675-9813-80200BBE5BDB}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0083DAF-E92E-45D3-AEA8-478EAAD912C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0083DAF-E92E-45D3-AEA8-478EAAD912C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0083DAF-E92E-45D3-AEA8-478EAAD912C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0083DAF-E92E-45D3-AEA8-478EAAD912C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0B50A12-62AC-4675-9813-80200BBE5BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0B50A12-62AC-4675-9813-80200BBE5BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0B50A12-62AC-4675-9813-80200BBE5BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0B50A12-62AC-4675-9813-80200BBE5BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
