@@ -4,20 +4,18 @@
     using System.Linq;
     using MagicalCreatureDataBase.Data;
     using Models;
+    using System.Data.Entity;
+    using Data.Migrations;
 
     public class Program
     {
         public static void Main()
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
+
             var db = new MagicalCreatureDbContext();
 
-            var location = new Location
-            {
-                Name="Sofia"
-            };
-
-            db.Locations.Add(location);
-            db.SaveChanges();
+            
 
             Console.WriteLine(db.Locations.Count());
         }
