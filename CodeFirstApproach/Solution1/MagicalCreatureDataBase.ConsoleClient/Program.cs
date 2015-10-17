@@ -11,6 +11,8 @@
     {
         public static void Main()
         {
+            //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MagicalCreatureDbContext>());
+
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
 
             var db = new MagicalCreatureDbContext();

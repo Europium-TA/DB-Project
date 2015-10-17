@@ -72,8 +72,9 @@ namespace MagicalCreatureDataBase.Data.Migrations
                 AssesedDangerLevel = DangerLevel.Medium,
                 Species = goblins,
                 Location =  loc2,
-                SuperNaturalAbilities = new List<SuperNaturalAbility> { supAb }
             };
+
+            creature.SuperNaturalAbilities.Add(supAb);
 
             context.MagicalCreatures.AddOrUpdate(
                 mc => mc.Name,

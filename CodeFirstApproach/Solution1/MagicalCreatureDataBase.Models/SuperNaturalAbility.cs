@@ -21,7 +21,7 @@
 
         public DangerLevel DangerLevel { get; set; }
 
-        public virtual ICollection<MagicalCreature> MagicalCreature
+        public virtual ICollection<MagicalCreature> MagicalCreatures
         {
             get { return this.magicalCreatures; }
             set { this.magicalCreatures = value; }
