@@ -2,12 +2,18 @@
 {
     using System;
     using System.Linq;
+    using System.Collections.Generic;
     using MagicalCreatureDataBase.Data;
     using Models;
     using System.Data.Entity;
     using Data.Migrations;
     using System.Data.Entity.Migrations;
     using Models.Enumerations;
+    using MagicalCreatureReport;
+    using PdfSharp.Pdf;
+    using PdfSharp.Drawing;
+    using PdfSharp.Charting;
+    using System.Text;
 
     public class Program
     {
@@ -19,14 +25,41 @@
 
             var db = new MagicalCreatureDbContext();
 
+            var intput = Console.ReadLine();
+
+            var list = ExtractMagicalCreaturesByMythologyName("input");
+
+            PdfReportFromList(list);
+        }
+
+        private static void PdfReportFromList(ICollection<MagCreatureRepType> list)
+        {
+            PdfDocument pdf = new PdfDocument();
+            PdfPage pdfPage = pdf.AddPage();
+            XGraphics graph = XGraphics.FromPdfPage(pdfPage);
+            XFont font = new XFont("Verdana", 10, XFontStyle.Bold);
+
+            int yPoint = 0;
+            foreach (var item in list)
+            {
+                var text = item.Name + " at " + item.Location + " and it is: " + item.Species;
+                graph.DrawString(text, font, XBrushes.Black, new XRect(40, yPoint, pdfPage.Width.Point, pdfPage.Height.Point), XStringFormats.TopLeft);
+                yPoint = yPoint + 40;
+            }
+
+
+            pdf.Save("firstpage.pdf");
+        }
+
+        private static void AddElf()
+        {
+            var db = new MagicalCreatureDbContext();
+
             var mythology = new Mythology
             {
                 Name = "Norse",
                 AreaOfOrigin = "Denmakr"
             };
-
-            db.Mythologies.Add(mythology);
-
 
             var goblins = new Species
             {
@@ -67,7 +100,26 @@
 
             db.SaveChanges();
 
-            Console.WriteLine(db.MagicalCreatures.Count());
+            Console.WriteLine(db.Mythologies.Count());
+        }
+
+        private static ICollection<MagCreatureRepType> ExtractMagicalCreaturesByMythologyName(string mythology) 
+        {
+            var db = new MagicalCreatureDbContext();
+
+            var list = db.MagicalCreatures
+                .Where(c => c.Species.Mythology.Name == "Norse")
+                .Select(c => new MagCreatureRepType
+                {
+                    Name = c.Name,
+                    Location = c.Location.Name,
+                    Date = c.DateSpotted,
+                    Species = c.Species.Name,
+                    Aggression = c.AggressionWhenSpotted
+                })
+                .ToList();
+
+            return list;
         }
     }
 }
