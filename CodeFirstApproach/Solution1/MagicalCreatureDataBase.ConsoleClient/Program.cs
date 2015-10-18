@@ -16,6 +16,7 @@
     using System.Text;
     using System.Xml.Serialization;
     using System.Xml.Linq;
+    using Newtonsoft.Json;
 
     public class Program
     {
@@ -31,12 +32,25 @@
 
             var list = ExtractMagicalCreaturesByMythologyName("Norse");
 
-            //PdfReportFromList(list);
+            XmlReport(list);
+            PdfReportFromList(list);
+            JsonReport(list);
 
-            
         }
 
-        
+        private static void JsonReport(ICollection<MagCreatureRepType> list)
+        {
+            var jsonObjs = new StringBuilder();
+
+            foreach (var item in list)
+            {
+                var jsonObj = JsonConvert.SerializeObject(list.First(), Formatting.Indented);
+                jsonObjs.Append(jsonObj);
+            }
+
+            System.IO.File.WriteAllText("jsonReport.json", jsonObjs.ToString());
+        }
+
 
         private static void XmlReport(ICollection<MagCreatureRepType> creatures)
         {
