@@ -1,8 +1,12 @@
 ﻿namespace MagicalCreatureDataBase.ConsoleClient
 {
     using System;
+    using System.Data;
+    using System.Data.OleDb;
+    using System.IO;
     using System.Linq;
     using System.Collections.Generic;
+    using Ionic.Zip;
     using MagicalCreatureDataBase.Data;
     using Models;
     using System.Data.Entity;
@@ -28,6 +32,23 @@
 
             var db = new MagicalCreatureDbContext();
 
+            try
+            {
+                ExtractZip("../../Sightings.zip");
+
+                var list = Directory.GetFiles("../../temp/", "*", SearchOption.AllDirectories);
+
+                foreach (var filePath in list)
+                {
+                    Console.WriteLine("Reading from file {0}", filePath);
+                    ConnectToExcel(filePath);
+                }
+            }
+            finally
+            {
+                Directory.Delete("../../temp", true);
+            }   
+
             //var intput = Console.ReadLine();
 
             //var list = ExtractMagicalCreaturesByMythologyName("Norse");
@@ -37,6 +58,49 @@
             //JsonReport(list);
 
         }
+
+        public static void ConnectToExcel(string filePath)
+        {
+            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=Yes'";
+
+            using (OleDbConnection excelConnection = new OleDbConnection(connectionString))
+            {
+                excelConnection.Open();
+
+                DataTable dtExcelSchema;
+                dtExcelSchema = excelConnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+                var sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+
+                OleDbCommand excelCommand = new OleDbCommand(string.Format("SELECT * FROM [Sheet1$]", sheetName), excelConnection);
+
+                OleDbDataReader reader = excelCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Console.WriteLine("{0} {1} {2} {3} {4} {5}",
+                        reader.GetValue(0),
+                        reader.GetValue(1),
+                        reader.GetValue(2),
+                        reader.GetValue(3),
+                        reader.GetValue(4),
+                        reader.GetValue(5));
+                }
+            }       
+        }
+
+        public static void ExtractZip(string filePath)
+        {
+            using (ZipFile zipExtractor = ZipFile.Read(filePath))
+            {
+                foreach (var zippedFile in zipExtractor)
+                {
+                    zippedFile.Extract("../../temp/");
+                }
+            }
+        }
+
+
 
         private static void JsonReport(ICollection<MagCreatureRepType> list)
         {
