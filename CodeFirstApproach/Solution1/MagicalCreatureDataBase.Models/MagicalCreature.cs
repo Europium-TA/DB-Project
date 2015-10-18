@@ -27,12 +27,12 @@
         // Link to Speicies table
         public int SpeciesId { get; set; }
 
-        public Species Species { get; set; }
+        public virtual Species Species { get; set; }
 
         // Linkt to Locations Table
         public int LocationId { get; set; }
 
-        public Location Location { get; set; }
+        public virtual Location Location { get; set; }
 
         //Link to SuperNaturalAbilities Talbe
         public virtual ICollection<SuperNaturalAbility> SuperNaturalAbilities

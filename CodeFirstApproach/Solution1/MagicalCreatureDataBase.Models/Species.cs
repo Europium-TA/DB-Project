@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Species
     {
@@ -19,7 +20,8 @@
 
         public string Description { get; set; }
 
-        public virtual int MythologyId { get; set; }
+        [ForeignKey("Mythology")]
+        public int MythologyId { get; set; }
 
         public virtual Mythology Mythology { get; set; }
 

@@ -18,7 +18,7 @@
 
         public string AreaOfOrigin { get; set; }
 
-        public ICollection<Species> Species
+        public virtual ICollection<Species> Species
         {
             get { return this.species; }
             set { this.species = value; }

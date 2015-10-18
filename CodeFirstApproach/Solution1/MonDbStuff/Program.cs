@@ -13,7 +13,8 @@ namespace MonDbStuff
         {
             MongoClient client = new MongoClient("mongodb://localhost");
 
-            var dataBase = client.GetDatabase("test");
+            var dataBase = client.GetDatabase("test");
+
         }
     }
 }
