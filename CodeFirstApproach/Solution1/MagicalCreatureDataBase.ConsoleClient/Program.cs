@@ -14,6 +14,8 @@
     using PdfSharp.Drawing;
     using PdfSharp.Charting;
     using System.Text;
+    using System.Xml.Serialization;
+    using System.Xml.Linq;
 
     public class Program
     {
@@ -25,11 +27,33 @@
 
             var db = new MagicalCreatureDbContext();
 
-            var intput = Console.ReadLine();
+            //var intput = Console.ReadLine();
 
-            var list = ExtractMagicalCreaturesByMythologyName("input");
+            var list = ExtractMagicalCreaturesByMythologyName("Norse");
 
-            PdfReportFromList(list);
+            //PdfReportFromList(list);
+
+            
+        }
+
+        
+
+        private static void XmlReport(ICollection<MagCreatureRepType> creatures)
+        {
+            var report = new XElement(XName.Get("MagicalCreatureReport"));
+            foreach (var c in creatures)
+            {
+                var personXml = new XElement("Creature",
+                    new XElement("name", c.Name),
+                    new XElement("location", c.Location),
+                    new XElement("dateSpotted", c.Date),
+                    new XElement("species", c.Species),
+                    new XElement("aggression", c.Aggression));
+
+                report.Add(personXml);
+            }
+           
+            report.Save("report.xml");
         }
 
         private static void PdfReportFromList(ICollection<MagCreatureRepType> list)

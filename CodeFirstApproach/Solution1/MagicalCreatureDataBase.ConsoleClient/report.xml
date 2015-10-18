@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MagicalCreatureReport>
+  <Creature>
+    <name>Bob1</name>
+    <location>Plovdiv</location>
+    <dateSpotted>2015-10-18T11:22:24.093</dateSpotted>
+    <species>Elf</species>
+    <aggression>Aggitated</aggression>
+  </Creature>
+  <Creature>
+    <name>Bob1</name>
+    <location>Plovdiv</location>
+    <dateSpotted>2015-10-18T11:23:55.64</dateSpotted>
+    <species>Elf</species>
+    <aggression>Aggitated</aggression>
+  </Creature>
+  <Creature>
+    <name>Bob1</name>
+    <location>Plovdiv</location>
+    <dateSpotted>2015-10-18T11:23:58.397</dateSpotted>
+    <species>Elf</species>
+    <aggression>Aggitated</aggression>
+  </Creature>
+</MagicalCreatureReport>
