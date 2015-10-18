@@ -30,11 +30,11 @@
 
             //var intput = Console.ReadLine();
 
-            var list = ExtractMagicalCreaturesByMythologyName("Norse");
+            //var list = ExtractMagicalCreaturesByMythologyName("Norse");
 
-            XmlReport(list);
-            PdfReportFromList(list);
-            JsonReport(list);
+            //XmlReport(list);
+            //PdfReportFromList(list);
+            //JsonReport(list);
 
         }
 
