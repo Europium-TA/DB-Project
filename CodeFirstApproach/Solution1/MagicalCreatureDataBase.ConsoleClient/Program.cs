@@ -30,42 +30,47 @@
     public class Program
     {
 
-       
+
         public static void Main()
         {
 
 
             System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
-           
 
-            UpdateDatabaseMySql();
 
-            //var db = new MagicalCreatureDbContext();
+            //UpdateDatabaseMySql();
 
-            //var intput = Console.ReadLine();
+            var db = new MagicalCreatureDbContext();
 
-            //var list = ExtractMagicalCreaturesByMythologyName("Norse");
+           // var intput = Console.ReadLine();
+
+            var list = ExtractMagicalCreaturesByMythologyName("Norse");
 
             //XmlReport(list);
             //PdfReportFromList(list);
-            //JsonReport(list);
+            // JsonReport(list);
+
+            Console.WriteLine();
+            var s = new MongoCreator();
+            s.GenerateSampleData();
+
+            var db1 = s.GetDatabase(MongoCreator.DatabaseName, MongoCreator.DatabaseHost);
+            var transports = db1.GetCollection<BsonDocument>("MagicalCreatureDocuments");
+            Console.WriteLine(transports.Count());
 
 
         }
 
-        private static void JsonReport(ICollection<MagCreatureRepType> list)
+        private static void JsonReport(ICollection<MagicalCreatureModel> list)
         {
-            var jsonObjs = new StringBuilder();
-
+            var count = 0;
             foreach (var item in list)
             {
+                count++;
                 var jsonObj = JsonConvert.SerializeObject(item, Formatting.Indented);
-                jsonObjs.Append(jsonObj);
+                System.IO.File.WriteAllText("../../../DataSystem/" + count + ".json", jsonObj.ToString());
             }
-
-            System.IO.File.WriteAllText("jsonReport.json", jsonObjs.ToString());
         }
-
 
         private static void XmlReport(ICollection<MagicalCreatureModel> creatures)
         {
@@ -73,16 +78,16 @@
             foreach (var c in creatures)
             {
                 var personXml = new XElement("Creature",
-                    new XElement("name", c.Name),                   
+                    new XElement("name", c.Name),
                     new XElement("dateSpotted", c.DateSpotted),
                     new XElement("aggression", c.AggressionWhenSpotted),
                     new XElement("danger", c.AssesedDangerLevel),
                     new XElement("location", c.Location),
-                    new XElement("species", c.Species));                  
+                    new XElement("species", c.Species));
 
                 report.Add(personXml);
             }
-           
+
             report.Save("report.xml");
         }
 
@@ -157,7 +162,7 @@
             Console.WriteLine(db.Mythologies.Count());
         }
 
-        private static ICollection<MagicalCreatureModel> ExtractMagicalCreaturesByMythologyName(string mythology) 
+        private static ICollection<MagicalCreatureModel> ExtractMagicalCreaturesByMythologyName(string mythology)
         {
             var db = new MagicalCreatureDbContext();
 
@@ -165,12 +170,12 @@
                 .Where(c => c.Species.Mythology.Name == "Norse")
                 .Select(c => new MagicalCreatureModel
                 {
-                   Name = c.Name,
-                   DateSpotted = c.DateSpotted,
-                   AggressionWhenSpotted = c.AggressionWhenSpotted,
-                   AssesedDangerLevel = c.AssesedDangerLevel,
-                   Location = c.Location.Name,
-                   Species = c.Species.Name + " from" + c.Species.Mythology.Name + " mythology"
+                    Name = c.Name,
+                    DateSpotted = c.DateSpotted,
+                    AggressionWhenSpotted = c.AggressionWhenSpotted,
+                    AssesedDangerLevel = c.AssesedDangerLevel,
+                    Location = c.Location.Name,
+                    Species = c.Species.Name + " from" + c.Species.Mythology.Name + " mythology"
                 })
                 .ToList();
 
