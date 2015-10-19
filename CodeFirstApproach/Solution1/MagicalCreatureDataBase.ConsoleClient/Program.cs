@@ -47,7 +47,23 @@
 
             //ImportMongoToSql();
 
-            GeneratePDfReport();
+            //GeneratePDfReport();
+            var dbContext = new MagicalCreatureDbContext();
+
+            var list = dbContext.MagicalCreatures
+                .Where(c => c.LocationId != c.Species.Mythology.LocationId)
+                .Select(c => new MagicalCreatureModel
+                {
+                    Name = c.Name,
+                    AggressionWhenSpotted = c.AggressionWhenSpotted,
+                    DateSpotted = c.DateSpotted,
+                    AssesedDangerLevel = c.AssesedDangerLevel,
+                    Location = c.Location.Name,
+                    Species = c.Species.Name
+                })
+                .ToList();
+
+            XmlReport(list);
         }
 
         private static void GeneratePDfReport()
@@ -210,7 +226,7 @@
                 report.Add(personXml);
             }
 
-            report.Save("report.xml");
+            report.Save("../../../DataSystem/report.xml");
         }
 
         private static void PdfReportFromList(ICollection<MagicalCreatureModel> list)
