@@ -1,12 +1,12 @@
-﻿using MagicalCreatureDataBase.Models.Enumerations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MagicalCreatureDataBase.ConsoleClient.MagicalCreatureReport
+﻿namespace MagicalCreatureDataBase.ConsoleClient.MagicalCreatureReport
 {
+    using MagicalCreatureDataBase.Models.Enumerations;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class MagCreatureRepType
     {
         public string Name { get; set; }

@@ -17,9 +17,9 @@
 
         public string Name { get; set; }
 
-        public int RangeInMeters { get; set; }
+        public int? RangeInMeters { get; set; }
 
-        public DangerLevel DangerLevel { get; set; }
+        public DangerLevel? DangerLevel { get; set; }
 
         public virtual ICollection<MagicalCreature> MagicalCreatures
         {

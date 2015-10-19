@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
-    using MagicalCreatureDataBase.Data;
+    using Data;
     using Models;
     using System.Data.Entity;
     using Data.Migrations;
@@ -17,26 +17,86 @@
     using System.Xml.Serialization;
     using System.Xml.Linq;
     using Newtonsoft.Json;
+    using MongoDbStuff;
+    using MongoDB.Bson;
+    using MongoDB.Driver;
+    using MongoDB.Bson.Serialization.Attributes;
+    using MongoDB.Driver.Builders;
 
     public class Program
     {
-        public static void Main()
+
+        const string DatabaseHost = "mongodb://127.0.0.1";
+        const string DatabaseName = "Logger";
+
+
+        class Log
         {
-            //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MagicalCreatureDbContext>());
+            [BsonRepresentation(BsonType.ObjectId)]
+            public string Id { get; set; }
 
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
+            public string Text { get; set; }
 
-            var db = new MagicalCreatureDbContext();
-
-            //var intput = Console.ReadLine();
-
-            var list = ExtractMagicalCreaturesByMythologyName("Norse");
-
-            XmlReport(list);
-            PdfReportFromList(list);
-            JsonReport(list);
-
+            public DateTime LogDate { get; set; }
         }
+
+        static MongoDatabase GetDatabase(string name, string fromHost)
+        {
+            var mongoClient = new MongoClient(fromHost);
+            var server = mongoClient.GetServer();
+            return server.GetDatabase(name);
+        }
+
+        static void Main()
+        {
+            var db = GetDatabase(DatabaseName, DatabaseHost);
+
+            var logs = db.GetCollection<Log>("Logs");
+
+            logs.Insert(new Log()
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                LogDate = DateTime.Now,
+                Text = "Something important happened"
+            });
+
+            var update = Update.Set("Text", "Changed Text at " + DateTime.Now);
+
+
+            var query = Query.And(
+                Query.LT("LogDate", DateTime.Now.AddSeconds(-1))
+                );
+
+            logs.Update(query, update);
+
+            var s= logs.FindAll()
+                .Select(l => l.Text)
+                .ToList();
+
+            foreach (var item in s)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        /*public static void Main()
+        {
+            ////Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MagicalCreatureDbContext>());
+
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
+
+            //var db = new MagicalCreatureDbContext();
+
+            ////var intput = Console.ReadLine();
+
+            //var list = ExtractMagicalCreaturesByMythologyName("Norse");
+
+            //XmlReport(list);
+            //PdfReportFromList(list);
+            //JsonReport(list);
+
+           
+        }*/
 
         private static void JsonReport(ICollection<MagCreatureRepType> list)
         {
