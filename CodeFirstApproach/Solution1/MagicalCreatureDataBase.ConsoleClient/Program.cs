@@ -28,6 +28,7 @@
     using DataAccess;
     using DataAccess.Importers;
     using System.IO;
+    using Pdf;
 
     public class Program
     {
@@ -44,9 +45,32 @@
 
             CreteMongoDb();
 
-            ImportMongoToSql();
+            //ImportMongoToSql();
+
+            GeneratePDfReport();
         }
 
+        private static void GeneratePDfReport()
+        {
+            var report = new PdfReportGenerator();
+            var db = new MagicalCreatureDbContext();
+            var species = new Species();
+            species.Name = "Dragon";
+            species.Mythology = db.Mythologies.FirstOrDefault();
+
+            var creature = new MagicalCreature();
+            creature.Name = "Bob";
+            creature.AssesedDangerLevel = DangerLevel.High;
+            creature.DateSpotted = DateTime.Now.AddDays(-10);
+            creature.AggressionWhenSpotted = AggressionLevel.Aggitated;
+            creature.Location = db.Locations.FirstOrDefault();
+            creature.Species = species;
+
+            db.MagicalCreatures.Add(creature);
+            db.SaveChanges();
+
+            report.CreateUserReport(db.MagicalCreatures,"Report1.pdf",DateTime.Now);
+        }
         private static void ImportMongoToSql()
         {
             var mongoCreator = new MongoCreator();
