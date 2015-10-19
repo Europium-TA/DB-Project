@@ -76,8 +76,11 @@
 
                 OleDbDataReader reader = excelCommand.ExecuteReader();
 
+                MagicalCreature newMonster = new MagicalCreature();
+ 
                 while (reader.Read())
                 {
+                    newMonsterProperties.Add(reader.Ge)
                     Console.WriteLine("{0} {1} {2} {3} {4} {5}",
                         reader.GetValue(0),
                         reader.GetValue(1),
