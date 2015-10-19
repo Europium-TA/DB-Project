@@ -10,48 +10,47 @@
 
     using MongoDB.Bson.Serialization.Attributes;
     using MagicalCreatureDataBase.Models.Enumerations;
+    using DataAccess;
 
-    public class InitializedMongoDb
+    public class MongoCreator
     {
 
-        public const string DatabaseName = "MagicalCreatureDocuments";
+        public const string DatabaseHost = "mongodb://127.0.0.1";
+        public const string DatabaseName = "MagicalCreatures";
 
         public void GenerateSampleData()
         {
-            var creature1 = new MongDbDataStruct
+            var creature1 = new MagicalCreatureModel
             {
                 Name = "Jhon1",
-                DateSpoted = DateTime.Now.AddDays(-10),
-                DLevel = DangerLevel.High,
-                AggressionWhenSpotted = AggressionLevel.Docile,
-                Location = "Sofia",
-                Mythology = "British",
-                Spices = "Dragon",
-                Abilities = new string[] { "fly", "fire breath", "Magic" }
+                DateSpotted = DateTime.Now.AddDays(-10),
+                AssesedDangerLevel =DangerLevel.High,
+                AggressionWhenSpotted = AggressionLevel.Aggitated,
+                Species = "Dragon",
+                Location = "New York"
             };
 
-            var creature2 = new MongDbDataStruct
+            var creature2 = new MagicalCreatureModel
             {
                 Name = "Jhon2",
-                DateSpoted = DateTime.Now.AddDays(-10),
-                DLevel = DangerLevel.High,
+                DateSpotted = DateTime.Now.AddDays(-10),
+                AssesedDangerLevel = DangerLevel.High,
                 AggressionWhenSpotted = AggressionLevel.Enraged,
+                Species = "Gian",
                 Location = "Sofia",
-                Mythology = "Norse",
-                Spices = "Gian",
-                Abilities = new string[] { "strenght" }
+
+
+
             };
 
-            var creature3 = new MongDbDataStruct
+            var creature3 = new MagicalCreatureModel
             {
                 Name = "Locki",
-                DateSpoted = DateTime.Now.AddDays(-10),
-                DLevel = DangerLevel.High,
+                DateSpotted = DateTime.Now.AddDays(-10),
+                AssesedDangerLevel = DangerLevel.High,
                 AggressionWhenSpotted = AggressionLevel.Docile,
+                Species = "God",
                 Location = "Sofia",
-                Mythology = "Norse",
-                Spices = "God",
-                Abilities = new string[] { "Illusiong", "Magic" }
             };
 
 
@@ -59,36 +58,32 @@
             this.InsertData(creature1);
             this.InsertData(creature2);
             this.InsertData(creature3);
-            var creature4 = creature1;
-            creature4.Name = "Jim";
-            this.InsertData(creature4);
+         
 
 
         }
-        public IMongoDatabase GetDatabase(string name)
-        {
-            var mongoClient = new MongoClient();
-            var dataBase = mongoClient.GetDatabase(name);
 
-            return dataBase;
+        public MongoDatabase GetDatabase(string name, string fromHost)
+        {
+            var mongoClient = new MongoClient(fromHost);
+            var server = mongoClient.GetServer();
+            return server.GetDatabase(name);
         }
 
-        private void InsertData(MongDbDataStruct data)
+        public void InsertData(MagicalCreatureModel data)
         {
-            var db = this.GetDatabase(DatabaseName);
+            var db = this.GetDatabase(DatabaseName, DatabaseHost);
 
             var transports = db.GetCollection<BsonDocument>("MagicalCreatureDocuments");
-            transports.InsertOneAsync(new BsonDocument
+            transports.Insert(new BsonDocument
             {
                 { "Id", ObjectId.GenerateNewId().ToString() },
                 {"Name", data.Name },
-                {"Date", data.DateSpoted.ToShortDateString() },
-                { "Location", data.Location },
-                {"DangerLeve", data.DLevel },
-                {"Species", data.Spices },
-                {"Mythology", data.Mythology },
+                {"Date", data.DateSpotted.ToShortDateString() },
+                {"DangerLeve", data.AssesedDangerLevel },
                 {"Aggression", data.AggressionWhenSpotted },
-                {"Abilities", string.Join(",",data.Abilities) }
+                {"Species", data.Species },
+                { "Location", data.Location },
             });
         }
     }
