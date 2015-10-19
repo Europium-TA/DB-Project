@@ -33,11 +33,10 @@
        
         public static void Main()
         {
-            //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MagicalCreatureDbContext>());
 
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
 
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureMySqlDbContext, Data.MySql.Migrations.Configuration>());
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
+           
 
             UpdateDatabaseMySql();
 
@@ -60,7 +59,7 @@
 
             foreach (var item in list)
             {
-                var jsonObj = JsonConvert.SerializeObject(list.First(), Formatting.Indented);
+                var jsonObj = JsonConvert.SerializeObject(item, Formatting.Indented);
                 jsonObjs.Append(jsonObj);
             }
 
@@ -68,17 +67,18 @@
         }
 
 
-        private static void XmlReport(ICollection<MagCreatureRepType> creatures)
+        private static void XmlReport(ICollection<MagicalCreatureModel> creatures)
         {
             var report = new XElement(XName.Get("MagicalCreatureReport"));
             foreach (var c in creatures)
             {
                 var personXml = new XElement("Creature",
-                    new XElement("name", c.Name),
+                    new XElement("name", c.Name),                   
+                    new XElement("dateSpotted", c.DateSpotted),
+                    new XElement("aggression", c.AggressionWhenSpotted),
+                    new XElement("danger", c.AssesedDangerLevel),
                     new XElement("location", c.Location),
-                    new XElement("dateSpotted", c.Date),
-                    new XElement("species", c.Species),
-                    new XElement("aggression", c.Aggression));
+                    new XElement("species", c.Species));                  
 
                 report.Add(personXml);
             }
@@ -86,7 +86,7 @@
             report.Save("report.xml");
         }
 
-        private static void PdfReportFromList(ICollection<MagCreatureRepType> list)
+        private static void PdfReportFromList(ICollection<MagicalCreatureModel> list)
         {
             PdfDocument pdf = new PdfDocument();
             PdfPage pdfPage = pdf.AddPage();
@@ -109,13 +109,13 @@
         {
             var db = new MagicalCreatureDbContext();
 
-            var mythology = new Mythology
+            var mythology = new Models.Mythology
             {
                 Name = "Norse",
                 AreaOfOrigin = "Denmakr"
             };
 
-            var goblins = new Species
+            var goblins = new Models.Species
             {
                 Name = "Elf",
                 Mythology = mythology,
@@ -125,8 +125,8 @@
             db.Species.Add(goblins);
             //context.SaveChanges();
 
-            var loc = new Location { Name = "Plovdiv" };
-            var supAb = new SuperNaturalAbility
+            var loc = new Models.Location { Name = "Plovdiv" };
+            var supAb = new Models.SuperNaturalAbility
             {
                 Name = "Magic Missle",
                 RangeInMeters = 10,
@@ -157,19 +157,20 @@
             Console.WriteLine(db.Mythologies.Count());
         }
 
-        private static ICollection<MagCreatureRepType> ExtractMagicalCreaturesByMythologyName(string mythology) 
+        private static ICollection<MagicalCreatureModel> ExtractMagicalCreaturesByMythologyName(string mythology) 
         {
             var db = new MagicalCreatureDbContext();
 
             var list = db.MagicalCreatures
                 .Where(c => c.Species.Mythology.Name == "Norse")
-                .Select(c => new MagCreatureRepType
+                .Select(c => new MagicalCreatureModel
                 {
-                    Name = c.Name,
-                    Location = c.Location.Name,
-                    Date = c.DateSpotted,
-                    Species = c.Species.Name,
-                    Aggression = c.AggressionWhenSpotted
+                   Name = c.Name,
+                   DateSpotted = c.DateSpotted,
+                   AggressionWhenSpotted = c.AggressionWhenSpotted,
+                   AssesedDangerLevel = c.AssesedDangerLevel,
+                   Location = c.Location.Name,
+                   Species = c.Species.Name + " from" + c.Species.Mythology.Name + " mythology"
                 })
                 .ToList();
 
