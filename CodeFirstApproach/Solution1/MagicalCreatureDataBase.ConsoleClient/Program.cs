@@ -43,6 +43,46 @@
             //LoadInitialExcelDataFromZipFile();
 
             CreteMongoDb();
+
+            ImportMongoToSql();
+        }
+
+        private static void ImportMongoToSql()
+        {
+            var mongoCreator = new MongoCreator();
+            var db = mongoCreator.GetDatabase(MongoCreator.DatabaseName, MongoCreator.DatabaseHost);
+            var myths = db.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
+            var data = myths.FindAll();
+
+            var dbsql = new MagicalCreatureDbContext();
+
+            var locations = dbsql.Locations.Select(o => o.Name).ToString();
+
+            foreach (var item in data)
+            {
+                var loctionData = item["LocationOfOrigin"].AsString;
+                
+                if(!locations.Contains(loctionData))
+                {
+                    var loc = new Location { Name = loctionData };
+                    dbsql.Locations.Add(loc);
+
+                    var mythDataNme = item["Name"].AsString;
+                    var mythology = new Mythology { Name = mythDataNme, Location = loc };
+
+                    dbsql.Mythologies.Add(mythology);
+                }
+                else
+                {
+                    var mythDataNme = item["Name"].AsString;
+                    var mythology = new Mythology { Name = mythDataNme, LocationId = locations.IndexOf(loctionData) };
+                    dbsql.Mythologies.Add(mythology);
+                }
+
+            }
+
+            dbsql.SaveChanges();
+
         }
 
         private static void CreteMongoDb()
@@ -98,22 +138,6 @@
             }
                         
             db.SaveChanges();
-        }
-
-        private static void MongoDb()
-        {
-            Console.WriteLine();
-            var s = new MongoCreator();
-            //s.GenerateSampleData();
-
-            var db1 = s.GetDatabase(MongoCreator.DatabaseName, MongoCreator.DatabaseHost);
-            var transports = db1.GetCollection<BsonDocument>("MagicalCreatureDocuments");
-            var all = transports.FindAll();
-            foreach (var item in all)
-            {
-                Console.WriteLine(item);
-            }
-           
         }
 
         private static void JsonReport(ICollection<MagicalCreatureModel> list)
