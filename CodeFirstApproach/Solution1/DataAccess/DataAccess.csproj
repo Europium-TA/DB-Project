@@ -63,7 +63,6 @@
     <Compile Include="FluentModelMetadataSource.cs" />
     <Compile Include="Importers\ExcelDataImporter.cs" />
     <Compile Include="Importers\ZipExtractor.cs" />
-    <Compile Include="OtherModels\Location.cs" />
     <Compile Include="MagicalCreatureModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +71,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MagicalCreatureDataBase.Data\MagicalCreatureDataBase.Data.csproj">
+      <Project>{e0083daf-e92e-45d3-aea8-478eaad912c9}</Project>
+      <Name>MagicalCreatureDataBase.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MagicalCreatureDataBase.Models\MagicalCreatureDataBase.Models.csproj">
       <Project>{133838a9-5ff1-4fbb-b98e-b1e5ad019b7d}</Project>
       <Name>MagicalCreatureDataBase.Models</Name>

@@ -2,6 +2,7 @@
 {
     using Models;
     using System.Data.Entity;
+    using System.Data.Entity.ModelConfiguration.Conventions;
 
     public class MagicalCreatureDbContext : DbContext
     {
@@ -16,8 +17,11 @@
 
         public virtual IDbSet<Species> Species { get; set; }
 
-        public virtual IDbSet<SuperNaturalAbility> SuperNaturalAbilities { get; set; }
-
         public virtual IDbSet<Location> Locations { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
     }
 }

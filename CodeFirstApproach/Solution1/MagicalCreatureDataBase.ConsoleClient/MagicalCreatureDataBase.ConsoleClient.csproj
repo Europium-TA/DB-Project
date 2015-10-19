@@ -115,10 +115,6 @@
       <Project>{e1f45835-26a1-4e7d-9aa6-32c82512c47b}</Project>
       <Name>DataAccess</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExcelConverter\ExcelConverter.csproj">
-      <Project>{bb8a4b6f-b228-4acd-b060-aa688a06d656}</Project>
-      <Name>ExcelConverter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MagicalCreatureDataBase.Data\MagicalCreatureDataBase.Data.csproj">
       <Project>{e0083daf-e92e-45d3-aea8-478eaad912c9}</Project>
       <Name>MagicalCreatureDataBase.Data</Name>

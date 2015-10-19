@@ -20,7 +20,6 @@
 
         public string Description { get; set; }
 
-        [ForeignKey("Mythology")]
         public int MythologyId { get; set; }
 
         public virtual Mythology Mythology { get; set; }

@@ -7,11 +7,8 @@
 
     public class MagicalCreature
     {
-        private ICollection<SuperNaturalAbility> superNaturalAbilities;
-
         public MagicalCreature()
         {
-            this.superNaturalAbilities = new HashSet<SuperNaturalAbility>();
         }
 
         public int Id { get; set; }
@@ -34,11 +31,5 @@
 
         public virtual Location Location { get; set; }
 
-        //Link to SuperNaturalAbilities Talbe
-        public virtual ICollection<SuperNaturalAbility> SuperNaturalAbilities
-        {
-            get { return this.superNaturalAbilities; }
-            set { this.superNaturalAbilities = value; }
-        }
     }
 }

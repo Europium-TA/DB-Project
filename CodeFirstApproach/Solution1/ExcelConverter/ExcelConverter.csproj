@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{133838A9-5FF1-4FBB-B98E-B1E5AD019B7D}</ProjectGuid>
+    <ProjectGuid>{BB8A4B6F-B228-4ACD-B060-AA688A06D656}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicalCreatureDataBase.Models</RootNamespace>
-    <AssemblyName>MagicalCreatureDataBase.Models</AssemblyName>
+    <RootNamespace>ExcelConverter</RootNamespace>
+    <AssemblyName>ExcelConverter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -42,6 +42,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,13 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enumerations\AgressionLevel.cs" />
-    <Compile Include="Enumerations\DangerLevel.cs" />
-    <Compile Include="Location.cs" />
-    <Compile Include="MagicalCreature.cs" />
-    <Compile Include="Mythology.cs" />
+    <Compile Include="Excel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Species.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MagicalCreatureDataBase.Data\MagicalCreatureDataBase.Data.csproj">
+      <Project>{e0083daf-e92e-45d3-aea8-478eaad912c9}</Project>
+      <Name>MagicalCreatureDataBase.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MagicalCreatureDataBase.Models\MagicalCreatureDataBase.Models.csproj">
+      <Project>{133838a9-5ff1-4fbb-b98e-b1e5ad019b7d}</Project>
+      <Name>MagicalCreatureDataBase.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

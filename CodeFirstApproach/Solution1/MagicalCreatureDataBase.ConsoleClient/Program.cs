@@ -27,7 +27,6 @@
     using Telerik.OpenAccess;
     using DataAccess;
     using System.IO;
-    using Excell;
 
     public class Program
     {
@@ -36,31 +35,26 @@
         public static void Main()
         {
 
+            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
 
-            //System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
+            GenerateSqlDatabBaseIfNeeded();
 
+        }
 
+        private static void GenerateSqlDatabBaseIfNeeded()
+        {
+            var db = new MagicalCreatureDbContext();
 
-
-            //var db = new MagicalCreatureDbContext();
-
-            //// var intput = Console.ReadLine();
-
-            //var list = ExtractMagicalCreaturesByMythologyName("Norse");
-
-            //db.Dispose();
-            ////XmlReport(list);
-            ////PdfReportFromList(list);
-            //// JsonReport(list);
-
-            //MongoDb();
-            ////UpdateDatabaseMySql();
-            ////addToMySql(list);
-
-            var something = new Excel();
-
-            something.SelectExcelFilesFromZip("../../../DataSystem/Book1.zip");
-
+            var loc = new Location
+            {
+                Name = "Sofia"
+            };
+            if (db.Locations.Count() == 0)
+            {
+                db.Locations.Add(loc);
+            }
+                        
+            db.SaveChanges();
         }
 
         private static void MongoDb()
@@ -147,7 +141,7 @@
             pdf.Save("firstpage.pdf");
         }
 
-        private static void AddElf()
+       /* private static void AddElf()
         {
             var db = new MagicalCreatureDbContext();
 
@@ -197,7 +191,7 @@
             db.SaveChanges();
 
             Console.WriteLine(db.Mythologies.Count());
-        }
+        }*/
 
         private static ICollection<MagicalCreatureModel> ExtractMagicalCreaturesByMythologyName(string mythology)
         {

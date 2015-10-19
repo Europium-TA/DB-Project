@@ -1,5 +1,7 @@
 ﻿namespace DataAccess.Importers
 {
+    using MagicalCreatureDataBase.Data;
+    using MagicalCreatureDataBase.Models;
     using MagicalCreatureDataBase.Models.Enumerations;
     using System;
     using System.Collections.Generic;
@@ -14,29 +16,28 @@
     {
         private const string WorksheetFileExtensionPattern = @".xls[x]?\b";
         // TODO: FileNames - MagicalCreatures-19-oct-2015.xls
-        private const string CreaturesWorksheetFilePattern = @"\MagicalCreatures-\d{2}-\w{3}-\d{4}.xls[x]?\b";
+        private const string CreaturesWorksheetFilePattern = @"\d{2}-\d{2}-\d{4}.xls[x]?\b";
         private const string InvalidFileNameMessage = @"Provided file name is either invalid or does not match 
                                                     the naming convention for an xls/xlsx [{0}] data file.";
 
-        public ICollection<MagicalCreatureModel> ImportMagCreaturesDataFromDirectory(string directoryPath)
+        public void ImportCreaturesDataFromDirectory(string directoryPath)
         {
-            IEnumerable<string> filePaths = Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories)
-                                     .Where(p => Regex.IsMatch(p, CreaturesWorksheetFilePattern));
-
-            ICollection<MagicalCreatureModel> importedMagCreatures = new HashSet<MagicalCreatureModel>();
+            IEnumerable<string> filePaths = Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories);
+                                    // .Where(p => Regex.IsMatch(p, CreaturesWorksheetFilePattern));
+            
+            var db = new MagicalCreatureDbContext();
 
             foreach (var path in filePaths)
             {
-                foreach (var creature in this.ImportMagCreaturesDataFromFile(path))
+                foreach (var location in ImportMagCreaturesDataFromFile(path))
                 {
-                    importedMagCreatures.Add(creature);
+                    db.Locations.Add(location);
                 }
             }
-
-            return importedMagCreatures;
+            db.SaveChanges();
         }
 
-        public ICollection<MagicalCreatureModel> ImportMagCreaturesDataFromFile(string filePath)
+        public ICollection<Location> ImportMagCreaturesDataFromFile(string filePath)
         {
             if (!Regex.IsMatch(filePath, CreaturesWorksheetFilePattern))
             {
@@ -45,10 +46,10 @@
 
             OleDbConnection connection = new OleDbConnection();
 
-            connection.ConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0;HDR=yes'", filePath);
+            connection.ConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0 xml;HDR=yes'", filePath);
 
             connection.Open();
-
+            Console.WriteLine("Connection open...");
             using (connection)
             {
                 var schema = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
@@ -56,7 +57,7 @@
 
                 OleDbCommand selectAllRowsCommand = new OleDbCommand("SELECT * FROM [" + sheetName + "]", connection);
 
-                ICollection<MagicalCreatureModel> importedCreatures = new HashSet<MagicalCreatureModel>();
+                ICollection<Location> importedLocations = new HashSet<Location>();
 
                 using (OleDbDataAdapter adapter = new OleDbDataAdapter(selectAllRowsCommand))
                 {
@@ -70,19 +71,14 @@
                             try
                             {
                                 string name = reader["Name"].ToString();
-                                DateTime date = DateTime.Parse(reader["DateTime"].ToString(), CultureInfo.InvariantCulture);
-                                DangerLevel dangerLevel = (DangerLevel)int.Parse(reader["AssesedDangerLevel"].ToString());
-                                AggressionLevel aggressionLevel = (AggressionLevel)int.Parse(reader["AggressionWhenSpotted"].ToString());
 
-                                var creature = new MagicalCreatureModel()
+                                var location = new Location()
                                 {
                                     Name = name,
-                                    DateSpotted = date,
-                                    AssesedDangerLevel = dangerLevel,
-                                    AggressionWhenSpotted=aggressionLevel
+                                   
                                 };
 
-                                importedCreatures.Add(creature);
+                                importedLocations.Add(location);
                             }
                             catch (FormatException)
                             { }
@@ -90,7 +86,7 @@
                     }
                 }
 
-                return importedCreatures;
+                return importedLocations;
             }
         }
     }
