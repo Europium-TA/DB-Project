@@ -64,6 +64,8 @@
                 .ToList();
 
             XmlReport(list);
+            JsonReport(list);
+            addToMySql(list);
         }
 
         private static void GeneratePDfReport()
@@ -195,7 +197,7 @@
 
         private static void addToMySql(ICollection<MagicalCreatureModel> list)
         {
-
+            UpdateDatabaseMySql();
             var context = new FluentModel();
 
             var count = context.MagicalCreatures.Count();

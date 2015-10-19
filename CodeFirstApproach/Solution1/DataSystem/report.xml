@@ -48,4 +48,12 @@
     <location>Sofia</location>
     <species>Dragon</species>
   </Creature>
+  <Creature>
+    <name>Bob</name>
+    <dateSpotted>2015-10-10T02:26:36.047</dateSpotted>
+    <aggression>Aggitated</aggression>
+    <danger>High</danger>
+    <location>Sofia</location>
+    <species>Dragon</species>
+  </Creature>
 </MagicalCreatureReport>
