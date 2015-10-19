@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MagicalCreatureReport\MagCreatureRepType.cs" />
-    <Compile Include="MongoDbStuff\MongoData.cs" />
+    <Compile Include="MongoDbStuff\MongDbDataStruct.cs" />
     <Compile Include="MongoDbStuff\MonogoCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

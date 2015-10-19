@@ -40,7 +40,34 @@
 
             GenerateSqlDatabBaseIfNeeded();
 
-            LoadInitialExcelDataFromZipFile();
+            //LoadInitialExcelDataFromZipFile();
+
+            CreteMongoDb();
+        }
+
+        private static void CreteMongoDb()
+        {
+            var mongoCreator =  new MongoCreator();
+          
+            var db1 = mongoCreator.GetDatabase(MongoCreator.DatabaseName, MongoCreator.DatabaseHost);
+            var transports = db1.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
+
+            var count = transports.FindAll().Count();
+
+            if(count==0)
+            {
+                mongoCreator.GenerateSampleData();
+                transports = db1.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
+                count = transports.FindAll().Count();
+                Console.WriteLine("MythologiesCreated + "+count);
+                return;
+            }
+
+            transports = db1.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
+            count = transports.FindAll().Count();
+
+            Console.WriteLine("Mongo db Exists with " + count);           
+
         }
 
         private static void LoadInitialExcelDataFromZipFile()

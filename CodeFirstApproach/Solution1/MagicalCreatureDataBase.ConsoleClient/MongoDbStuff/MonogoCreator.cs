@@ -20,47 +20,25 @@
 
         public void GenerateSampleData()
         {
-            var creature1 = new MagicalCreatureModel
+            var data = new MongDbDataStruct[]
             {
-                Name = "Jhon1",
-                DateSpotted = DateTime.Now.AddDays(-10),
-                AssesedDangerLevel =DangerLevel.High,
-                AggressionWhenSpotted = AggressionLevel.Aggitated,
-                Species = "Dragon",
-                Location = "New York"
-            };
-
-            var creature2 = new MagicalCreatureModel
-            {
-                Name = "Jhon2",
-                DateSpotted = DateTime.Now.AddDays(-10),
-                AssesedDangerLevel = DangerLevel.High,
-                AggressionWhenSpotted = AggressionLevel.Enraged,
-                Species = "Gian",
-                Location = "Sofia",
-
-
+                new MongDbDataStruct { Name = "Norse1", LocationOfOrigin = "DMCity1" },
+                new MongDbDataStruct { Name = "Norse2", LocationOfOrigin = "DMCity2" },
+                new MongDbDataStruct { Name = "Norse3", LocationOfOrigin = "DMCity3" },
+                new MongDbDataStruct { Name = "Norse4", LocationOfOrigin = "DMCity4" },
+                new MongDbDataStruct { Name = "Norse5", LocationOfOrigin = "DMCity5" },
+                new MongDbDataStruct { Name = "Norse6", LocationOfOrigin = "DMCity6" },
+                new MongDbDataStruct { Name = "Norse7", LocationOfOrigin = "DMCity7" },
+                new MongDbDataStruct { Name = "Norse8", LocationOfOrigin = "DMCity8" },
+                new MongDbDataStruct { Name = "Norse9", LocationOfOrigin = "DMCity9" },
+                new MongDbDataStruct { Name = "Norse10", LocationOfOrigin = "DMCity10" },
 
             };
 
-            var creature3 = new MagicalCreatureModel
+            foreach (var item in data)
             {
-                Name = "Locki",
-                DateSpotted = DateTime.Now.AddDays(-10),
-                AssesedDangerLevel = DangerLevel.High,
-                AggressionWhenSpotted = AggressionLevel.Docile,
-                Species = "God",
-                Location = "Sofia",
-            };
-
-
-
-            this.InsertData(creature1);
-            this.InsertData(creature2);
-            this.InsertData(creature3);
-         
-
-
+                this.InsertData(item);
+            }
         }
 
         public MongoDatabase GetDatabase(string name, string fromHost)
@@ -70,20 +48,17 @@
             return server.GetDatabase(name);
         }
 
-        public void InsertData(MagicalCreatureModel data)
+        public void InsertData(MongDbDataStruct data)
         {
             var db = this.GetDatabase(DatabaseName, DatabaseHost);
 
-            var transports = db.GetCollection<BsonDocument>("MagicalCreatureDocuments");
+            var transports = db.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
             transports.Insert(new BsonDocument
             {
                 { "Id", ObjectId.GenerateNewId().ToString() },
                 {"Name", data.Name },
-                {"Date", data.DateSpotted.ToShortDateString() },
-                {"DangerLeve", data.AssesedDangerLevel },
-                {"Aggression", data.AggressionWhenSpotted },
-                {"Species", data.Species },
-                { "Location", data.Location },
+                {"LocationOfOrigin", data.LocationOfOrigin },
+                {"Description", "" }             
             });
         }
     }
