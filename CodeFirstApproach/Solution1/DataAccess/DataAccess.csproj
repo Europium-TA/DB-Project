@@ -60,12 +60,8 @@
   <ItemGroup>
     <Compile Include="FluentModel.cs" />
     <Compile Include="FluentModelMetadataSource.cs" />
-    <Compile Include="OtherModels\Location.cs" />
     <Compile Include="MagicalCreatureModel.cs" />
-    <Compile Include="OtherModels\Mythology.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OtherModels\Species.cs" />
-    <Compile Include="OtherModels\SuperNaturalAbility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenAccessNuGet.targets" />

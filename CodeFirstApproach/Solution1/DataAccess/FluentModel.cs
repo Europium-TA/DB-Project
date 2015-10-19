@@ -30,38 +30,6 @@ namespace DataAccess
             }
         }
 
-        public IQueryable<Location> Locations
-        {
-            get
-            {
-                return this.GetAll<Location>();
-            }
-        }
-
-        public IQueryable<Mythology> Mythologies
-        {
-            get
-            {
-                return this.GetAll<Mythology>();
-            }
-        }
-
-        public IQueryable<Species> Species
-        {
-            get
-            {
-                return this.GetAll<Species>();
-            }
-        }
-
-        public IQueryable<SuperNaturalAbility> SuperNaturalAbilities
-        {
-            get
-            {
-                return this.GetAll<SuperNaturalAbility>();
-            }
-        }
-
         public static BackendConfiguration GetBackendConfiguration()
         {
             BackendConfiguration backend = new BackendConfiguration();

@@ -26,6 +26,8 @@
     using MongoDB.Driver.Builders;
     using Telerik.OpenAccess;
     using DataAccess;
+    using System.IO;
+    using Excell;
 
     public class Program
     {
@@ -35,41 +37,76 @@
         {
 
 
-            System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
+            //System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
 
 
-            //UpdateDatabaseMySql();
 
-            var db = new MagicalCreatureDbContext();
 
-           // var intput = Console.ReadLine();
+            //var db = new MagicalCreatureDbContext();
 
-            var list = ExtractMagicalCreaturesByMythologyName("Norse");
+            //// var intput = Console.ReadLine();
 
-            //XmlReport(list);
-            //PdfReportFromList(list);
-            // JsonReport(list);
+            //var list = ExtractMagicalCreaturesByMythologyName("Norse");
 
+            //db.Dispose();
+            ////XmlReport(list);
+            ////PdfReportFromList(list);
+            //// JsonReport(list);
+
+            //MongoDb();
+            ////UpdateDatabaseMySql();
+            ////addToMySql(list);
+
+            var something = new Excel();
+
+            something.SelectExcelFilesFromZip("../../../DataSystem/Book1.zip");
+
+        }
+
+        private static void MongoDb()
+        {
             Console.WriteLine();
             var s = new MongoCreator();
-            s.GenerateSampleData();
+            //s.GenerateSampleData();
 
             var db1 = s.GetDatabase(MongoCreator.DatabaseName, MongoCreator.DatabaseHost);
             var transports = db1.GetCollection<BsonDocument>("MagicalCreatureDocuments");
-            Console.WriteLine(transports.Count());
-
-
+            var all = transports.FindAll();
+            foreach (var item in all)
+            {
+                Console.WriteLine(item);
+            }
+           
         }
 
         private static void JsonReport(ICollection<MagicalCreatureModel> list)
         {
+              
             var count = 0;
             foreach (var item in list)
             {
                 count++;
+               
                 var jsonObj = JsonConvert.SerializeObject(item, Formatting.Indented);
                 System.IO.File.WriteAllText("../../../DataSystem/" + count + ".json", jsonObj.ToString());
             }
+        }
+
+        private static void addToMySql(ICollection<MagicalCreatureModel> list)
+        {
+
+            var context = new FluentModel();
+
+            var count = context.MagicalCreatures.Count();
+            foreach (var item in list)
+            {
+                
+                var obj = item;
+                obj.Id = count;
+                context.Add(item);
+                count++;
+            }
+            context.SaveChanges();
         }
 
         private static void XmlReport(ICollection<MagicalCreatureModel> creatures)
