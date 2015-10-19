@@ -32,6 +32,9 @@
 
             var db = new MagicalCreatureDbContext();
 
+            //var hoi = db.Mythologies.FirstOrDefault(m => m.Name == "Norse");
+            //Console.WriteLine(hoi.ToString());
+
             try
             {
                 ExtractZip("../../Sightings.zip");
@@ -41,7 +44,8 @@
                 foreach (var filePath in list)
                 {
                     Console.WriteLine("Reading from file {0}", filePath);
-                    ConnectToExcel(filePath);
+                    Console.WriteLine("Database exist: {0}", db.Database.Exists());
+                    ConnectToExcel(filePath, db);
                 }
             }
             finally
@@ -59,7 +63,7 @@
 
         }
 
-        public static void ConnectToExcel(string filePath)
+        public static void ConnectToExcel(string filePath, MagicalCreatureDbContext db)
         {
             string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;HDR=Yes'";
 
@@ -74,21 +78,28 @@
 
                 OleDbCommand excelCommand = new OleDbCommand(string.Format("SELECT * FROM [Sheet1$]", sheetName), excelConnection);
 
-                OleDbDataReader reader = excelCommand.ExecuteReader();
-
-                MagicalCreature newMonster = new MagicalCreature();
+                OleDbDataReader reader = excelCommand.ExecuteReader();                
  
                 while (reader.Read())
                 {
-                    newMonsterProperties.Add(reader.Ge)
-                    Console.WriteLine("{0} {1} {2} {3} {4} {5}",
+                    MagicalCreature newMonster = new MagicalCreature();
+
+                    newMonster.Name = reader.GetValue(0).ToString();
+                    newMonster.AssesedDangerLevel = (DangerLevel)int.Parse(reader.GetValue(2).ToString());
+                    newMonster.AggressionWhenSpotted = (AggressionLevel)int.Parse(reader.GetValue(3).ToString());
+
+                    Console.WriteLine("Adding... {0} {1} {2} {3} {4} {5}",
                         reader.GetValue(0),
                         reader.GetValue(1),
                         reader.GetValue(2),
                         reader.GetValue(3),
                         reader.GetValue(4),
                         reader.GetValue(5));
+
+                    db.MagicalCreatures.AddOrUpdate(newMonster); 
+                    db.SaveChanges();
                 }
+
             }       
         }
 
@@ -102,8 +113,6 @@
                 }
             }
         }
-
-
 
         private static void JsonReport(ICollection<MagCreatureRepType> list)
         {
