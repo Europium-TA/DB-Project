@@ -2,7 +2,7 @@
 
 namespace DataAccess.Importers
 {
-    class ZipExtractor
+    public class ZipExtractor
     {
         public void Extract(string sourcePath, string destinationPath)
         {

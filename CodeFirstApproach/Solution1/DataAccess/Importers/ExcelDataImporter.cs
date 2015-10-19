@@ -20,7 +20,7 @@
         private const string InvalidFileNameMessage = @"Provided file name is either invalid or does not match 
                                                     the naming convention for an xls/xlsx [{0}] data file.";
 
-        public void ImportCreaturesDataFromDirectory(string directoryPath)
+        public void ImportDataFromDirectories(string directoryPath)
         {
             IEnumerable<string> filePaths = Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories);
                                     // .Where(p => Regex.IsMatch(p, CreaturesWorksheetFilePattern));
@@ -29,7 +29,7 @@
 
             foreach (var path in filePaths)
             {
-                foreach (var location in ImportMagCreaturesDataFromFile(path))
+                foreach (var location in ImportDataFromFile(path))
                 {
                     db.Locations.Add(location);
                 }
@@ -37,13 +37,8 @@
             db.SaveChanges();
         }
 
-        public ICollection<Location> ImportMagCreaturesDataFromFile(string filePath)
+        private ICollection<Location> ImportDataFromFile(string filePath)
         {
-            if (!Regex.IsMatch(filePath, CreaturesWorksheetFilePattern))
-            {
-                throw new ArgumentException("Invalid file name!");
-            }
-
             OleDbConnection connection = new OleDbConnection();
 
             connection.ConnectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties='Excel 12.0 xml;HDR=yes'", filePath);

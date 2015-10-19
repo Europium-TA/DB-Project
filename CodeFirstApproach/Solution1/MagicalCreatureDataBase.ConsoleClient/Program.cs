@@ -26,6 +26,7 @@
     using MongoDB.Driver.Builders;
     using Telerik.OpenAccess;
     using DataAccess;
+    using DataAccess.Importers;
     using System.IO;
 
     public class Program
@@ -39,6 +40,21 @@
 
             GenerateSqlDatabBaseIfNeeded();
 
+            LoadInitialExcelDataFromZipFile();
+        }
+
+        private static void LoadInitialExcelDataFromZipFile()
+        {
+            ExtractFilesFromZip();
+
+            var dataImporter = new ExcelDataImporter();
+            dataImporter.ImportDataFromDirectories("../../../DataSystem/ExtractedFiles");
+        }
+
+        private static void ExtractFilesFromZip()
+        {
+            var zipExtractor = new ZipExtractor();
+            zipExtractor.Extract("../../../DataSystem/LocationsData.zip", "../../../DataSystem/ExtractedFiles");
         }
 
         private static void GenerateSqlDatabBaseIfNeeded()
