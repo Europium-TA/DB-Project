@@ -44,7 +44,7 @@
                 foreach (var filePath in list)
                 {
                     Console.WriteLine("Reading from file {0}", filePath);
-                    Console.WriteLine("Database exist: {0}", db.Database.Exists());
+                    //Console.WriteLine("Database exist: {0}", db.Database.Exists());
                     ConnectToExcel(filePath, db);
                 }
             }
@@ -85,18 +85,21 @@
                     MagicalCreature newMonster = new MagicalCreature();
 
                     newMonster.Name = reader.GetValue(0).ToString();
+                    newMonster.DateSpotted = DateTime.Now;
                     newMonster.AssesedDangerLevel = (DangerLevel)int.Parse(reader.GetValue(2).ToString());
                     newMonster.AggressionWhenSpotted = (AggressionLevel)int.Parse(reader.GetValue(3).ToString());
+                    newMonster.SpeciesId = 1;
+                    newMonster.LocationId = 1;
 
                     Console.WriteLine("Adding... {0} {1} {2} {3} {4} {5}",
-                        reader.GetValue(0),
-                        reader.GetValue(1),
-                        reader.GetValue(2),
-                        reader.GetValue(3),
-                        reader.GetValue(4),
-                        reader.GetValue(5));
+                        newMonster.Name ,
+                        newMonster.DateSpotted,
+                        newMonster.AssesedDangerLevel,
+                        newMonster.AggressionWhenSpotted,
+                        newMonster.SpeciesId,
+                        newMonster.LocationId);
 
-                    db.MagicalCreatures.AddOrUpdate(newMonster); 
+                    db.MagicalCreatures.AddOrUpdate(m => m.DateSpotted, newMonster); 
                     db.SaveChanges();
                 }
 
