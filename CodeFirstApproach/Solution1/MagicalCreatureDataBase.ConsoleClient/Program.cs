@@ -25,33 +25,17 @@
     public class Program
     {
         public static void Main()
-        {
+        {          
             //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MagicalCreatureDbContext>());
 
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
 
             var db = new MagicalCreatureDbContext();
 
-            //var hoi = db.Mythologies.FirstOrDefault(m => m.Name == "Norse");
-            //Console.WriteLine(hoi.ToString());
+            //IExcelImporter excelImporter = new ExcelImporter("../../Sightings.zip", db);
+            //excelImporter.ImportFromExcel();
 
-            try
-            {
-                ExtractZip("../../Sightings.zip");
-
-                var list = Directory.GetFiles("../../temp/", "*", SearchOption.AllDirectories);
-
-                foreach (var filePath in list)
-                {
-                    Console.WriteLine("Reading from file {0}", filePath);
-                    //Console.WriteLine("Database exist: {0}", db.Database.Exists());
-                    ConnectToExcel(filePath, db);
-                }
-            }
-            finally
-            {
-                Directory.Delete("../../temp", true);
-            }   
+            ImportFromZipExcel("../../Sightings.zip", db);            
 
             //var intput = Console.ReadLine();
 
@@ -61,6 +45,26 @@
             //PdfReportFromList(list);
             //JsonReport(list);
 
+        }
+
+        public static void ImportFromZipExcel(string zipFileLocation, MagicalCreatureDbContext db)
+        {
+            try
+            {
+                ExtractZip(zipFileLocation);
+
+                var list = Directory.GetFiles("../../temp/", "*", SearchOption.AllDirectories);
+
+                foreach (var filePath in list)
+                {
+                    Console.WriteLine("Reading from file {0}", filePath);
+                    ConnectToExcel(filePath, db);
+                }
+            }
+            finally
+            {
+                Directory.Delete("../../temp", true);
+            }   
         }
 
         public static void ConnectToExcel(string filePath, MagicalCreatureDbContext db)
@@ -92,15 +96,17 @@
                     newMonster.LocationId = 1;
 
                     Console.WriteLine("Adding... {0} {1} {2} {3} {4} {5}",
-                        newMonster.Name ,
+                        newMonster.Name,
                         newMonster.DateSpotted,
                         newMonster.AssesedDangerLevel,
                         newMonster.AggressionWhenSpotted,
                         newMonster.SpeciesId,
                         newMonster.LocationId);
 
-                    db.MagicalCreatures.AddOrUpdate(m => m.DateSpotted, newMonster); 
-                    db.SaveChanges();
+                    //TODO : I think we must connect to DB here  
+
+                    //db.MagicalCreatures.AddOrUpdate(m => m.DateSpotted, newMonster); 
+                    //db.SaveChanges();
                 }
 
             }       

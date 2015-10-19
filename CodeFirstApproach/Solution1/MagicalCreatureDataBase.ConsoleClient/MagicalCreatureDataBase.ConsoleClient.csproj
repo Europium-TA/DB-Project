@@ -69,6 +69,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelImporter.cs" />
+    <Compile Include="IExcelImporter.cs" />
     <Compile Include="MagicalCreatureReport\MagCreatureRepType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
