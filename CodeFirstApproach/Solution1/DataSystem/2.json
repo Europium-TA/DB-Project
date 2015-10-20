@@ -1,0 +1,9 @@
+{
+  "Id": 0,
+  "Name": "Bob",
+  "DateSpotted": "2015-10-10T01:58:30.817",
+  "AssesedDangerLevel": 2,
+  "AggressionWhenSpotted": 2,
+  "Species": "Dragon",
+  "Location": "Sofia"
+}

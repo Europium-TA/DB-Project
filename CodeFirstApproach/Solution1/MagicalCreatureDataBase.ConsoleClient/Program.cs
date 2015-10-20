@@ -29,6 +29,7 @@
     using DataAccess.Importers;
     using System.IO;
     using Pdf;
+    using System.Xml;
 
     public class Program
     {
@@ -49,8 +50,48 @@
 
             //GeneratePDfReport();
             var dbContext = new MagicalCreatureDbContext();
+            List<MagicalCreatureModel> list = AllCreatures(dbContext);
 
-            var list = dbContext.MagicalCreatures
+            XmlReport(list);
+            JsonReport(list);
+            //addToMySql(list);
+
+            UpdateMythologies();
+        }
+
+        private static void UpdateMythologies()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("../../../DataSystem/AddData.xml");
+            XmlNode rootNode = doc.DocumentElement;
+
+            var dbsql = new MagicalCreatureDbContext();
+
+            var mongoCreator = new MongoCreator();
+            var db = mongoCreator.GetDatabase(MongoCreator.DatabaseName, MongoCreator.DatabaseHost);
+           
+
+            foreach (XmlNode node in rootNode.ChildNodes)
+            {
+                var name = node["name"].InnerText;
+                var description = node["description"].InnerText;
+
+                var myth = dbsql.Mythologies.First(x => x.Name == name);
+                myth.Discription = description;
+
+                var collection = db.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
+                var mythDb = collection.FindAll().First(x => x["Name"] == name);
+                mythDb["Description"] = description;
+
+                Console.WriteLine(mythDb["Description"].AsString);
+                collection.Save(mythDb);
+            }
+            dbsql.SaveChanges();
+        }
+
+        private static List<MagicalCreatureModel> AllCreatures(MagicalCreatureDbContext dbContext)
+        {
+            return dbContext.MagicalCreatures
                 .Where(c => c.LocationId != c.Species.Mythology.LocationId)
                 .Select(c => new MagicalCreatureModel
                 {
@@ -62,10 +103,6 @@
                     Species = c.Species.Name
                 })
                 .ToList();
-
-            XmlReport(list);
-            JsonReport(list);
-            addToMySql(list);
         }
 
         private static void GeneratePDfReport()
@@ -190,7 +227,7 @@
             {
                 count++;
                
-                var jsonObj = JsonConvert.SerializeObject(item, Formatting.Indented);
+                var jsonObj = JsonConvert.SerializeObject(item, Newtonsoft.Json.Formatting.Indented);
                 System.IO.File.WriteAllText("../../../DataSystem/" + count + ".json", jsonObj.ToString());
             }
         }
