@@ -1,9 +1,6 @@
 ﻿namespace MagicalCreatureDataBase.Models
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Species
     {

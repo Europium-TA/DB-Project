@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telerik.OpenAccess;
-using Telerik.OpenAccess.Metadata;
-
-namespace DataAccess
+﻿namespace DataAccess
 {
+    using System.Linq;
+    using Telerik.OpenAccess;
+    using Telerik.OpenAccess.Metadata;
+
     public partial class FluentModel : OpenAccessContext
     {
         private static string connectionStringName = @"connectionId1";

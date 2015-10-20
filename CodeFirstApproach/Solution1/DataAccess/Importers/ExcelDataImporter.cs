@@ -1,16 +1,12 @@
 ﻿namespace DataAccess.Importers
 {
-    using MagicalCreatureDataBase.Data;
-    using MagicalCreatureDataBase.Models;
-    using MagicalCreatureDataBase.Models.Enumerations;
     using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Data.OleDb;
-    using System.Globalization;
     using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
+    using MagicalCreatureDataBase.Data;
+    using MagicalCreatureDataBase.Models;
 
     public class ExcelDataImporter
     {

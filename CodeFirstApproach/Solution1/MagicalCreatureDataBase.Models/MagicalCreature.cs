@@ -2,8 +2,6 @@
 {
     using System;
     using Enumerations;
-    using System.Collections;
-    using System.Collections.Generic;
 
     public class MagicalCreature
     {

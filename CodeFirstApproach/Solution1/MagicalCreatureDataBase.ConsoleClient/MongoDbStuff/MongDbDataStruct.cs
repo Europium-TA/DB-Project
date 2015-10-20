@@ -1,8 +1,5 @@
 ﻿namespace MagicalCreatureDataBase.ConsoleClient.MongoDbStuff
 {
-    using System;
-    using MagicalCreatureDataBase.Models.Enumerations;
-
     public class MongDbDataStruct
     {
         public string Name { get; set; }

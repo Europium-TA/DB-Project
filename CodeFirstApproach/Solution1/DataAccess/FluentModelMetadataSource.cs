@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Telerik.OpenAccess.Metadata.Fluent;
-
-namespace DataAccess
+﻿namespace DataAccess
 {
+    using System.Collections.Generic;
+    using Telerik.OpenAccess.Metadata.Fluent;
+
     public partial class FluentModelMetadataSource : FluentMetadataSource
     {
         protected override IList<MappingConfiguration> PrepareMapping()

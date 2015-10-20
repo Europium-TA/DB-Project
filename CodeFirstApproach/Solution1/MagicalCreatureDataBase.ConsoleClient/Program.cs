@@ -3,33 +3,21 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using System.Xml;
     using Data;
     using Models;
     using System.Data.Entity;
     using Data.Migrations;
-    using System.Data.Entity.Migrations;
-    using Models.Enumerations;
-    using MagicalCreatureReport;
     using PdfSharp.Pdf;
     using PdfSharp.Drawing;
-    using PdfSharp.Charting;
-    using System.Text;
-    using System.Xml.Serialization;
     using System.Xml.Linq;
     using Newtonsoft.Json;
-    using MySql.Data;
-    using MySql.Data.Entity;
     using MongoDbStuff;
     using MongoDB.Bson;
-    using MongoDB.Driver;
-    using MongoDB.Bson.Serialization.Attributes;
-    using MongoDB.Driver.Builders;
     using Telerik.OpenAccess;
     using DataAccess;
     using DataAccess.Importers;
-    using System.IO;
     using Pdf;
-    using System.Xml;
 
     public class Program
     {
@@ -40,23 +28,56 @@
 
             System.Data.Entity.Database.SetInitializer(new MigrateDatabaseToLatestVersion<MagicalCreatureDbContext, Configuration>());
 
-            GenerateSqlDatabBaseIfNeeded();
-
-            //LoadInitialExcelDataFromZipFile();
-
-            CreteMongoDb();
-
-            //ImportMongoToSql();
-
-            //GeneratePDfReport();
+            
             var dbContext = new MagicalCreatureDbContext();
-            List<MagicalCreatureModel> list = AllCreatures(dbContext);
+            List<MagicalCreatureModel> list;
+            string lastCommnad = "";
+            while (true)
+            {
 
-            XmlReport(list);
-            JsonReport(list);
-            //addToMySql(list);
+                var input = Console.ReadLine();
 
-            UpdateMythologies();
+                switch(input)
+                {
+                    case "init":
+                        GenerateSqlDatabBaseIfNeeded();
+                        CreteMongoDb();
+                        break;
+                    case "excel":
+                        LoadInitialExcelDataFromZipFile();
+                        break;
+                    case "importMongo":
+                        ImportMongoToSql();
+                        break;
+                    case "pdf":
+                        GeneratePDfReport();
+                        break;
+                    case "xmlReport":
+                        dbContext = new MagicalCreatureDbContext();
+                        list = AllCreatures(dbContext);
+                        XmlReport(list);
+                        break;
+                    case "json":
+                        dbContext = new MagicalCreatureDbContext();
+                        list = AllCreatures(dbContext);
+                        JsonReport(list);
+                        break;
+                    case "mysql":
+                        dbContext = new MagicalCreatureDbContext();
+                        list = AllCreatures(dbContext);
+                        addToMySql(list);
+                        break;
+                    case "update":
+                        UpdateMythologies();
+                        break;
+                    case "exit":
+                        return;
+                    default:
+                        break;
+                }
+
+            }
+           
         }
 
         private static void UpdateMythologies()
@@ -107,23 +128,24 @@
 
         private static void GeneratePDfReport()
         {
+            /* 
+            
+             var species = new Species();
+             species.Name = "Dragon";
+             species.Mythology = db.Mythologies.FirstOrDefault();
+
+             var creature = new MagicalCreature();
+             creature.Name = "Bob";
+             creature.AssesedDangerLevel = DangerLevel.High;
+             creature.DateSpotted = DateTime.Now.AddDays(-10);
+             creature.AggressionWhenSpotted = AggressionLevel.Aggitated;
+             creature.Location = db.Locations.FirstOrDefault();
+             creature.Species = species;
+
+             db.MagicalCreatures.Add(creature);
+             db.SaveChanges();*/
             var report = new PdfReportGenerator();
             var db = new MagicalCreatureDbContext();
-            var species = new Species();
-            species.Name = "Dragon";
-            species.Mythology = db.Mythologies.FirstOrDefault();
-
-            var creature = new MagicalCreature();
-            creature.Name = "Bob";
-            creature.AssesedDangerLevel = DangerLevel.High;
-            creature.DateSpotted = DateTime.Now.AddDays(-10);
-            creature.AggressionWhenSpotted = AggressionLevel.Aggitated;
-            creature.Location = db.Locations.FirstOrDefault();
-            creature.Species = species;
-
-            db.MagicalCreatures.Add(creature);
-            db.SaveChanges();
-
             report.CreateUserReport(db.MagicalCreatures,"Report1.pdf",DateTime.Now);
         }
         private static void ImportMongoToSql()
@@ -178,7 +200,7 @@
                 mongoCreator.GenerateSampleData();
                 transports = db1.GetCollection<BsonDocument>("MagicalCreatureMythologyData");
                 count = transports.FindAll().Count();
-                Console.WriteLine("MythologiesCreated + "+count);
+                Console.WriteLine("MythologiesCreated" + count);
                 return;
             }
 
@@ -251,6 +273,7 @@
 
         private static void XmlReport(ICollection<MagicalCreatureModel> creatures)
         {
+            Console.WriteLine("Xml Report Generating");
             var report = new XElement(XName.Get("MagicalCreatureReport"));
             foreach (var c in creatures)
             {
